@@ -6,6 +6,16 @@ class MyFbase(object):
             raise ValueError('Your base has duplicate elements.')
 
     def encode(self, n):
+        """
+        >>> m.encode(0)
+        'a'
+        >>> m.encode(1)
+        'b'
+        >>> m.encode(2)
+        'c'
+        >>> m.encode(3)
+        'ba'
+        """
         b = len(self.base)
         if n == 0:
             return self.base[0]
@@ -20,9 +30,24 @@ class MyFbase(object):
 
 
     def decode(self, code):
+        """
+        >>> m.decode('a')
+        0
+        >>> m.decode('b')
+        1
+        >>> m.decode('c')
+        2
+        >>> m.decode('ba')
+        3
+        """
         res = 0
         rev_code = code[::-1]
         for i in range(0, len(code)):
             c = rev_code[i]
             res += self.base.index(c) * (len(self.base) ** i)
         return res
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(extraglobs={'m': MyFbase('abc')})
