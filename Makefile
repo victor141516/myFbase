@@ -3,7 +3,7 @@
 all: test publish
 
 test:
-	python muFbase/myfbase.py
+	python myFbase/myfbase.py
 
 build:
 	flit build
