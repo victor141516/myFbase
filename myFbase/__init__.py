@@ -10,4 +10,4 @@ Example:
 
 from .myfbase import MyFbase
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
