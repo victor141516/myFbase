@@ -1,11 +1,12 @@
 class MyFbase(object):
-    def __init__(self, base):
+    def __init__(self, base: str):
         super(MyFbase, self).__init__()
         self.base = [c for c in base]
+        self._numeric_base = len(self.base)
         if len(set(self.base)) != len(self.base):
-            raise ValueError('Your base has duplicate elements.')
+            raise ValueError("Your base has duplicate elements.")
 
-    def encode(self, n):
+    def encode(self, decimal_number: int) -> str:
         """
         >>> m.encode(0)
         'a'
@@ -16,20 +17,20 @@ class MyFbase(object):
         >>> m.encode(3)
         'ba'
         """
-        b = len(self.base)
-        if n == 0:
+
+        if decimal_number < 0:
+            raise ValueError("Can convert only positive integers")
+        if decimal_number == 0:
             return self.base[0]
+
         digits = []
-        while n > 0:
-            digits.append(int(n % b))
-            n //= b
-        res = ''
-        for e in digits[::-1]:
-            res += self.base[e]
-        return res
+        while decimal_number > 0:
+            digits.append(decimal_number % self._numeric_base)
+            decimal_number //= self._numeric_base
 
+        return "".join([self.base[e] for e in digits[::-1]])
 
-    def decode(self, code):
+    def decode(self, code: str) -> int:
         """
         >>> m.decode('a')
         0
@@ -40,14 +41,15 @@ class MyFbase(object):
         >>> m.decode('ba')
         3
         """
-        res = 0
-        rev_code = code[::-1]
-        for i in range(0, len(code)):
-            c = rev_code[i]
-            res += self.base.index(c) * (len(self.base) ** i)
-        return res
+
+        out = 0
+        reversed_code = code[::-1]
+        for index, char in enumerate(reversed_code, start=0):
+            out += self.base.index(char) * (self._numeric_base ** index)
+        return out
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
-    doctest.testmod(extraglobs={'m': MyFbase('abc')})
+
+    doctest.testmod(extraglobs={"m": MyFbase("abc")})
